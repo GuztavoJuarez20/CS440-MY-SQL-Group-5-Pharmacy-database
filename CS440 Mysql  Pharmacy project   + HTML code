@@ -1,0 +1,945 @@
+Create SQL: 
+
+-- CREATE TABLES FOR PHARMACY MANAGEMENT SYSTEM 
+
+ 
+
+CREATE TABLE Doctors ( 
+
+    Doctor_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Name VARCHAR(100) NOT NULL, 
+
+    Phone VARCHAR(15), 
+
+    PRIMARY KEY (Doctor_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Patients ( 
+
+    Patient_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Name VARCHAR(100) NOT NULL, 
+
+    DOB DATE, 
+
+    Contact_Info VARCHAR(255), 
+
+    PRIMARY KEY (Patient_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Appointments ( 
+
+    Appointment_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Patient_ID INT NOT NULL, 
+
+    Doctor_ID INT NOT NULL, 
+
+    Visit_Date DATETIME NOT NULL, 
+
+    Diagnosis TEXT, 
+
+    PRIMARY KEY (Appointment_ID), 
+
+    FOREIGN KEY (Patient_ID) REFERENCES Patients(Patient_ID), 
+
+    FOREIGN KEY (Doctor_ID) REFERENCES Doctors(Doctor_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Pharmacies ( 
+
+    Pharmacy_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Name VARCHAR(100) NOT NULL, 
+
+    Address VARCHAR(255), 
+
+    PRIMARY KEY (Pharmacy_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Prescriptions ( 
+
+    Prescription_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Patient_ID INT NOT NULL, 
+
+    Doctor_ID INT NOT NULL, 
+
+    Pharmacy_ID INT NOT NULL, 
+
+    Prescription_Date DATE NOT NULL, 
+
+    Dosage VARCHAR(50), 
+
+    Drug_Name VARCHAR(100), 
+
+    Confirmation BOOLEAN, 
+
+    PRIMARY KEY (Prescription_ID), 
+
+    FOREIGN KEY (Patient_ID) REFERENCES Patients(Patient_ID), 
+
+    FOREIGN KEY (Doctor_ID) REFERENCES Doctors(Doctor_ID), 
+
+    FOREIGN KEY (Pharmacy_ID) REFERENCES Pharmacies(Pharmacy_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Suppliers ( 
+
+    Supplier_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Name VARCHAR(100) NOT NULL, 
+
+    Phone VARCHAR(15), 
+
+    Address VARCHAR(255), 
+
+    PRIMARY KEY (Supplier_ID) 
+
+); 
+
+ 
+
+CREATE TABLE Orders ( 
+
+    Order_ID INT NOT NULL AUTO_INCREMENT, 
+
+    Supplier_ID INT NOT NULL, 
+
+    Pharmacy_ID INT NOT NULL, 
+
+    Order_Date DATE, 
+
+    Date_Shipped DATE, 
+
+    Item_Description TEXT, 
+
+    PRIMARY KEY (Order_ID), 
+
+    FOREIGN KEY (Supplier_ID) REFERENCES Suppliers(Supplier_ID), 
+
+    FOREIGN KEY (Pharmacy_ID) REFERENCES Pharmacies(Pharmacy_ID) 
+
+); 
+
+ 
+
+Insert SQL: 
+
+-- INSERT SAMPLE DATA FOR PHARMACY MANAGEMENT SYSTEM 
+
+ 
+
+INSERT INTO Doctors (Name, Phone) VALUES 
+
+('Dr. Marcus Smart', '555-766-2219'), 
+
+('Dr. Ross Mcvalle', '555-901-8872'), 
+
+('Dr. Derek Vines', '555-422-9771'); 
+
+ 
+
+INSERT INTO Patients (Name, DOB, Contact_Info) VALUES 
+
+('Michael Brown', '1985-06-15', 'Michaelangelo08@pharmacydata.com, 555-712-3834'), 
+
+('Sarah White', '1990-09-20', 'Swhite90@pharmacydata.com, 555-339-7441'), 
+
+('David Green', '1978-03-05', 'DavidtheGreenGiant@pharmacydata.com, 555-424-6371'); 
+
+ 
+
+INSERT INTO Pharmacies (Name, Address) VALUES 
+
+('Central Pharmacy', '388 Main St, Jefferson City, MO'), 
+
+('HealthPlus Pharmacy', '537 Oak Ave, Jefferson City, MO'), 
+
+('Community Pharmacy', '612 Pine Rd, Jefferson City, MO'); 
+
+ 
+
+INSERT INTO Appointments (Patient_ID, Doctor_ID, Visit_Date, Diagnosis) VALUES 
+
+(1, 1, '2025-11-28 10:00:00', 'Flu symptoms'), 
+
+(2, 2, '2025-11-29 14:30:00', 'Routine checkup'), 
+
+(3, 3, '2025-11-30 09:15:00', 'High blood pressure'), 
+
+(1, 1, '2025-12-03 10:00:00', 'Checkup'); 
+
+ 
+
+INSERT INTO Prescriptions (Patient_ID, Doctor_ID, Pharmacy_ID, Prescription_Date, Dosage, Drug_Name, Confirmation) VALUES 
+
+(1, 1, 1, '2025-11-28', '1 tab daily', 'Amoxicillin', 1), 
+
+(2, 2, 2, '2025-11-29', '2 tabs daily', 'Ibuprofen', 1), 
+
+(3, 3, 3, '2025-11-30', '1 tab nightly', 'Lisinopril', 1), 
+
+(1, 1, 1, '2025-11-28', '1 tab daily', 'Amoxicillin', 1); 
+
+ 
+
+INSERT INTO Suppliers (Name, Phone, Address) VALUES 
+
+('MedSupply Co.', '555-781-2290', '100 Supply Dr, Jefferson City, MO'), 
+
+('PharmaDistribution LLC', '555-664-9021', '250 Warehouse Rd, Jefferson City, MO'), 
+
+('HealthMeds Logistics', '555-443-7811', '812 Industrial Ave, Jefferson City, MO'); 
+
+ 
+
+INSERT INTO Orders (Supplier_ID, Pharmacy_ID, Order_Date, Date_Shipped, Item_Description) VALUES 
+
+(1, 1, '2025-11-20', '2025-11-22', '300 units of Tylenol'), 
+
+(2, 2, '2025-11-21', '2025-11-23', '150 units of Amoxicillin'), 
+
+(3, 3, '2025-11-22', '2025-11-24', '200 units of Ibuprofen'), 
+
+(3, 3, '2025-11-25', '2025-11-27', '200 units of Lisinopril'); 
+
+ 
+
+Stored Procedures: 
+
+DELIMITER $$ 
+
+ 
+
+-- Stored Procedure 1: Get All Patients 
+
+CREATE PROCEDURE GetAllPatients() 
+
+BEGIN 
+
+    SELECT * FROM Patients; 
+
+END $$ 
+
+ 
+
+-- Stored Procedure 2: Get Patient By ID 
+
+CREATE PROCEDURE GetPatientByID(IN p_id INT) 
+
+BEGIN 
+
+    SELECT * FROM Patients WHERE Patient_ID = p_id; 
+
+END $$ 
+
+ 
+
+-- Stored Procedure 3: Add New Patient 
+
+CREATE PROCEDURE AddPatient( 
+
+    IN p_name VARCHAR(100), 
+
+    IN p_dob DATE, 
+
+    IN p_contact VARCHAR(255) 
+
+) 
+
+BEGIN 
+
+    INSERT INTO Patients (Name, DOB, Contact_Info) 
+
+    VALUES (p_name, p_dob, p_contact); 
+
+END $$ 
+
+ 
+
+-- Stored Procedure 4: Get Doctor By ID 
+
+CREATE PROCEDURE GetDoctorByID(IN p_doctor_id INT) 
+
+BEGIN 
+
+    SELECT * FROM Doctors WHERE Doctor_ID = p_doctor_id; 
+
+END $$ 
+
+ 
+
+-- Stored Procedure 5: Prescription Summary for Patient 
+
+CREATE PROCEDURE GetPrescriptionSummaryByPatient(IN p_patient_id INT) 
+
+BEGIN 
+
+    SELECT  
+
+        pr.Prescription_ID, 
+
+        pa.Name AS Patient_Name, 
+
+        d.Name AS Doctor_Name, 
+
+        ph.Name AS Pharmacy_Name, 
+
+        pr.Prescription_Date, 
+
+        pr.Drug_Name, 
+
+        pr.Dosage, 
+
+        pr.Confirmation 
+
+    FROM Prescriptions pr 
+
+    JOIN Patients pa ON pr.Patient_ID = pa.Patient_ID 
+
+    JOIN Doctors d ON pr.Doctor_ID = d.Doctor_ID 
+
+    JOIN Pharmacies ph ON pr.Pharmacy_ID = ph.Pharmacy_ID 
+
+    WHERE pr.Patient_ID = p_patient_id 
+
+    ORDER BY pr.Prescription_Date DESC; 
+
+END $$ 
+
+ 
+
+DELIMITER ; 
+
+ 
+
+Triggers: 
+
+DELIMITER $$ 
+
+ 
+
+-- TRIGGER 1: Prescription must be after latest shipment 
+
+CREATE TRIGGER trg_prescription_after_shipment 
+
+BEFORE INSERT ON Prescriptions 
+
+FOR EACH ROW 
+
+BEGIN 
+
+    DECLARE latest_ship DATE; 
+
+ 
+
+    SELECT MAX(Date_Shipped) 
+
+    INTO latest_ship 
+
+    FROM Orders 
+
+    WHERE Pharmacy_ID = NEW.Pharmacy_ID; 
+
+ 
+
+    IF latest_ship IS NULL THEN 
+
+        SIGNAL SQLSTATE '45000' 
+
+        SET MESSAGE_TEXT = 'No shipment found for this pharmacy.'; 
+
+    END IF; 
+
+ 
+
+    IF NEW.Prescription_Date <= latest_ship THEN 
+
+        SIGNAL SQLSTATE '45000' 
+
+        SET MESSAGE_TEXT = 'Prescription date must be after latest shipment date.'; 
+
+    END IF; 
+
+ 
+
+END $$ 
+
+ 
+
+ 
+
+-- TRIGGER 2: Prevent double-booking of doctor appointments 
+
+CREATE TRIGGER prevent_double_booking 
+
+BEFORE INSERT ON Appointments 
+
+FOR EACH ROW 
+
+BEGIN 
+
+    DECLARE booking_count INT; 
+
+ 
+
+    SELECT COUNT(*) 
+
+    INTO booking_count 
+
+    FROM Appointments 
+
+    WHERE Doctor_ID = NEW.Doctor_ID 
+
+    AND Visit_Date = NEW.Visit_Date; 
+
+ 
+
+    IF booking_count > 0 THEN 
+
+        SIGNAL SQLSTATE '45000' 
+
+        SET MESSAGE_TEXT = 'Doctor already booked at this date/time'; 
+
+    END IF; 
+
+ 
+
+END $$ 
+
+ 
+
+DELIMITER ; 
+
+ 
+
+SQL Queries simple: 
+
+-- SIMPLE QUERIES 
+
+ 
+
+-- 1) Count total patients 
+
+SELECT COUNT(*) FROM Patients; 
+
+ 
+
+-- 2) Patients born after 1990-01-01 
+
+SELECT * FROM Patients 
+
+WHERE DOB > '1990-01-01'; 
+
+ 
+
+-- 3) All filled prescriptions 
+
+SELECT * FROM Prescriptions 
+
+WHERE Confirmation = 1; 
+
+ 
+
+-- 4) All appointments for Doctor_ID = 1 
+
+SELECT * FROM Appointments 
+
+WHERE Doctor_ID = 1; 
+
+ 
+
+SQL queries enhanced: 
+
+-- ADVANCED / ENHANCED QUERIES 
+
+ 
+
+-- 1) Latest order placed 
+
+SELECT * FROM Orders 
+
+ORDER BY Order_Date DESC 
+
+LIMIT 1; 
+
+ 
+
+-- 2) Total prescriptions per doctor 
+
+SELECT d.Name AS Doctor, COUNT(p.Prescription_ID) AS Total_Prescriptions 
+
+FROM Doctors d 
+
+LEFT JOIN Prescriptions p ON d.Doctor_ID = p.Doctor_ID 
+
+GROUP BY d.Name; 
+
+ 
+
+-- 3) Total orders per pharmacy 
+
+SELECT ph.Name AS Pharmacy, COUNT(o.Order_ID) AS Total_Orders 
+
+FROM Pharmacies ph 
+
+LEFT JOIN Orders o ON ph.Pharmacy_ID = o.Pharmacy_ID 
+
+GROUP BY ph.Name; 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+HTML CODE: 
+
+<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+
+<title>Pharmacy Project</title> 
+
+</head> 
+
+<body> 
+
+ 
+
+<h1>Pharmacy Project</h1> 
+
+ 
+
+<!-- ===================== DOCTORS ===================== --> 
+
+<h2>Doctors</h2> 
+
+<input id="docName" placeholder="Name"> 
+
+<input id="docPhone" placeholder="Phone"> 
+
+<button onclick="addDoctor()">Add Doctor</button> 
+
+ 
+
+<table border="1" id="doctorTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Phone</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PATIENTS ===================== --> 
+
+<h2>Patients</h2> 
+
+<input id="patName" placeholder="Name"> 
+
+<input id="patDOB" placeholder="DOB (YYYY-MM-DD)"> 
+
+<input id="patContact" placeholder="Contact Info"> 
+
+<button onclick="addPatient()">Add Patient</button> 
+
+ 
+
+<table border="1" id="patientTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>DOB</th><th>Contact</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== APPOINTMENTS ===================== --> 
+
+<h2>Appointments</h2> 
+
+<input id="appPatient" placeholder="Patient ID"> 
+
+<input id="appDoctor" placeholder="Doctor ID"> 
+
+<input id="appDate" placeholder="Visit Date (YYYY-MM-DD HH:MM)"> 
+
+<input id="appDiagnosis" placeholder="Diagnosis"> 
+
+<button onclick="addAppointment()">Add Appointment</button> 
+
+ 
+
+<table border="1" id="appointmentTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Patient_ID</th><th>Doctor_ID</th><th>Visit Date</th><th>Diagnosis</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PHARMACIES ===================== --> 
+
+<h2>Pharmacies</h2> 
+
+<input id="pharmName" placeholder="Name"> 
+
+<input id="pharmAddress" placeholder="Address"> 
+
+<button onclick="addPharmacy()">Add Pharmacy</button> 
+
+ 
+
+<table border="1" id="pharmacyTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Address</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PRESCRIPTIONS ===================== --> 
+
+<h2>Prescriptions</h2> 
+
+<input id="rxPatient" placeholder="Patient ID"> 
+
+<input id="rxDoctor" placeholder="Doctor ID"> 
+
+<input id="rxPharmacy" placeholder="Pharmacy ID"> 
+
+<input id="rxDate" placeholder="Prescription Date (YYYY-MM-DD)"> 
+
+<input id="rxDrug" placeholder="Drug Name"> 
+
+<input id="rxDose" placeholder="Dosage"> 
+
+<select id="rxConfirm"> 
+
+    <option value="1">Filled</option> 
+
+    <option value="0">Not Filled</option> 
+
+</select> 
+
+<button onclick="addPrescription()">Add Prescription</button> 
+
+ 
+
+<table border="1" id="prescriptionTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Pharmacy</th><th>Date</th> 
+
+        <th>Drug</th><th>Dosage</th><th>Filled?</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== SUPPLIERS ===================== --> 
+
+<h2>Suppliers</h2> 
+
+<input id="supName" placeholder="Supplier Name"> 
+
+<input id="supPhone" placeholder="Phone"> 
+
+<input id="supAddress" placeholder="Address"> 
+
+<button onclick="addSupplier()">Add Supplier</button> 
+
+ 
+
+<table border="1" id="supplierTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Phone</th><th>Address</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== ORDERS ===================== --> 
+
+<h2>Orders</h2> 
+
+<input id="ordSupplierID" placeholder="Supplier ID"> 
+
+<input id="ordPharmID" placeholder="Pharmacy ID"> 
+
+<input id="ordDate" placeholder="Order Date (YYYY-MM-DD)"> 
+
+<input id="ordShip" placeholder="Shipped Date (YYYY-MM-DD)"> 
+
+<input id="ordItem" placeholder="Item Description"> 
+
+<button onclick="addOrder()">Add Order</button> 
+
+ 
+
+<table border="1" id="orderTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Supplier_ID</th><th>Pharmacy_ID</th><th>Order Date</th> 
+
+        <th>Date Shipped</th><th>Item</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<script> 
+
+let docID = 1, patID = 1, appID = 1, pharmID = 1, rxID = 1, supplierID = 1, ordID = 1; 
+
+ 
+
+function addRow(tableId, values) { 
+
+    let table = document.getElementById(tableId); 
+
+ 
+
+    // Show table when first row is added 
+
+    table.style.display = "table"; 
+
+ 
+
+    let row = table.insertRow(); 
+
+    row.innerHTML = values.join("") + 
+
+        "<td><button onclick='this.parentNode.parentNode.remove()'>Delete</button></td>"; 
+
+} 
+
+ 
+
+/* DOCTORS */ 
+
+function addDoctor() { 
+
+    addRow("doctorTable", [ 
+
+        `<td>${docID++}</td>`, 
+
+        `<td>${docName.value}</td>`, 
+
+        `<td>${docPhone.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PATIENTS */ 
+
+function addPatient() { 
+
+    addRow("patientTable", [ 
+
+        `<td>${patID++}</td>`, 
+
+        `<td>${patName.value}</td>`, 
+
+        `<td>${patDOB.value}</td>`, 
+
+        `<td>${patContact.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* APPOINTMENTS */ 
+
+function addAppointment() { 
+
+    addRow("appointmentTable", [ 
+
+        `<td>${appID++}</td>`, 
+
+        `<td>${appPatient.value}</td>`, 
+
+        `<td>${appDoctor.value}</td>`, 
+
+        `<td>${appDate.value}</td>`, 
+
+        `<td>${appDiagnosis.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PHARMACIES */ 
+
+function addPharmacy() { 
+
+    addRow("pharmacyTable", [ 
+
+        `<td>${pharmID++}</td>`, 
+
+        `<td>${pharmName.value}</td>`, 
+
+        `<td>${pharmAddress.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PRESCRIPTIONS */ 
+
+function addPrescription() { 
+
+    addRow("prescriptionTable", [ 
+
+        `<td>${rxID++}</td>`, 
+
+        `<td>${rxPatient.value}</td>`, 
+
+        `<td>${rxDoctor.value}</td>`, 
+
+        `<td>${rxPharmacy.value}</td>`, 
+
+        `<td>${rxDate.value}</td>`, 
+
+        `<td>${rxDrug.value}</td>`, 
+
+        `<td>${rxDose.value}</td>`, 
+
+        `<td>${rxConfirm.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* SUPPLIERS */ 
+
+function addSupplier() { 
+
+    addRow("supplierTable", [ 
+
+        `<td>${supplierID++}</td>`, 
+
+        `<td>${supName.value}</td>`, 
+
+        `<td>${supPhone.value}</td>`, 
+
+        `<td>${supAddress.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* ORDERS */ 
+
+function addOrder() { 
+
+    addRow("orderTable", [ 
+
+        `<td>${ordID++}</td>`, 
+
+        `<td>${ordSupplierID.value}</td>`, 
+
+        `<td>${ordPharmID.value}</td>`, 
+
+        `<td>${ordDate.value}</td>`, 
+
+        `<td>${ordShip.value}</td>`, 
+
+        `<td>${ordItem.value}</td>` 
+
+    ]); 
+
+} 
+
+</script> 
+
+ 
+
+</body> 
+
+</html> 
