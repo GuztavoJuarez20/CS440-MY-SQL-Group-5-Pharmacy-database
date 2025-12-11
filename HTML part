@@ -1,0 +1,405 @@
+HTML CODE: 
+
+<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+
+<title>Pharmacy Project</title> 
+
+</head> 
+
+<body> 
+
+ 
+
+<h1>Pharmacy Project</h1> 
+
+ 
+
+<!-- ===================== DOCTORS ===================== --> 
+
+<h2>Doctors</h2> 
+
+<input id="docName" placeholder="Name"> 
+
+<input id="docPhone" placeholder="Phone"> 
+
+<button onclick="addDoctor()">Add Doctor</button> 
+
+ 
+
+<table border="1" id="doctorTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Phone</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PATIENTS ===================== --> 
+
+<h2>Patients</h2> 
+
+<input id="patName" placeholder="Name"> 
+
+<input id="patDOB" placeholder="DOB (YYYY-MM-DD)"> 
+
+<input id="patContact" placeholder="Contact Info"> 
+
+<button onclick="addPatient()">Add Patient</button> 
+
+ 
+
+<table border="1" id="patientTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>DOB</th><th>Contact</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== APPOINTMENTS ===================== --> 
+
+<h2>Appointments</h2> 
+
+<input id="appPatient" placeholder="Patient ID"> 
+
+<input id="appDoctor" placeholder="Doctor ID"> 
+
+<input id="appDate" placeholder="Visit Date (YYYY-MM-DD HH:MM)"> 
+
+<input id="appDiagnosis" placeholder="Diagnosis"> 
+
+<button onclick="addAppointment()">Add Appointment</button> 
+
+ 
+
+<table border="1" id="appointmentTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Patient_ID</th><th>Doctor_ID</th><th>Visit Date</th><th>Diagnosis</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PHARMACIES ===================== --> 
+
+<h2>Pharmacies</h2> 
+
+<input id="pharmName" placeholder="Name"> 
+
+<input id="pharmAddress" placeholder="Address"> 
+
+<button onclick="addPharmacy()">Add Pharmacy</button> 
+
+ 
+
+<table border="1" id="pharmacyTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Address</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== PRESCRIPTIONS ===================== --> 
+
+<h2>Prescriptions</h2> 
+
+<input id="rxPatient" placeholder="Patient ID"> 
+
+<input id="rxDoctor" placeholder="Doctor ID"> 
+
+<input id="rxPharmacy" placeholder="Pharmacy ID"> 
+
+<input id="rxDate" placeholder="Prescription Date (YYYY-MM-DD)"> 
+
+<input id="rxDrug" placeholder="Drug Name"> 
+
+<input id="rxDose" placeholder="Dosage"> 
+
+<select id="rxConfirm"> 
+
+    <option value="1">Filled</option> 
+
+    <option value="0">Not Filled</option> 
+
+</select> 
+
+<button onclick="addPrescription()">Add Prescription</button> 
+
+ 
+
+<table border="1" id="prescriptionTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Pharmacy</th><th>Date</th> 
+
+        <th>Drug</th><th>Dosage</th><th>Filled?</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== SUPPLIERS ===================== --> 
+
+<h2>Suppliers</h2> 
+
+<input id="supName" placeholder="Supplier Name"> 
+
+<input id="supPhone" placeholder="Phone"> 
+
+<input id="supAddress" placeholder="Address"> 
+
+<button onclick="addSupplier()">Add Supplier</button> 
+
+ 
+
+<table border="1" id="supplierTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Name</th><th>Phone</th><th>Address</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<!-- ===================== ORDERS ===================== --> 
+
+<h2>Orders</h2> 
+
+<input id="ordSupplierID" placeholder="Supplier ID"> 
+
+<input id="ordPharmID" placeholder="Pharmacy ID"> 
+
+<input id="ordDate" placeholder="Order Date (YYYY-MM-DD)"> 
+
+<input id="ordShip" placeholder="Shipped Date (YYYY-MM-DD)"> 
+
+<input id="ordItem" placeholder="Item Description"> 
+
+<button onclick="addOrder()">Add Order</button> 
+
+ 
+
+<table border="1" id="orderTable" style="display:none;"> 
+
+    <tr><th>ID</th><th>Supplier_ID</th><th>Pharmacy_ID</th><th>Order Date</th> 
+
+        <th>Date Shipped</th><th>Item</th><th>Delete</th></tr> 
+
+</table> 
+
+ 
+
+<hr> 
+
+ 
+
+<script> 
+
+let docID = 1, patID = 1, appID = 1, pharmID = 1, rxID = 1, supplierID = 1, ordID = 1; 
+
+ 
+
+function addRow(tableId, values) { 
+
+    let table = document.getElementById(tableId); 
+
+ 
+
+    // Show table when first row is added 
+
+    table.style.display = "table"; 
+
+ 
+
+    let row = table.insertRow(); 
+
+    row.innerHTML = values.join("") + 
+
+        "<td><button onclick='this.parentNode.parentNode.remove()'>Delete</button></td>"; 
+
+} 
+
+ 
+
+/* DOCTORS */ 
+
+function addDoctor() { 
+
+    addRow("doctorTable", [ 
+
+        `<td>${docID++}</td>`, 
+
+        `<td>${docName.value}</td>`, 
+
+        `<td>${docPhone.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PATIENTS */ 
+
+function addPatient() { 
+
+    addRow("patientTable", [ 
+
+        `<td>${patID++}</td>`, 
+
+        `<td>${patName.value}</td>`, 
+
+        `<td>${patDOB.value}</td>`, 
+
+        `<td>${patContact.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* APPOINTMENTS */ 
+
+function addAppointment() { 
+
+    addRow("appointmentTable", [ 
+
+        `<td>${appID++}</td>`, 
+
+        `<td>${appPatient.value}</td>`, 
+
+        `<td>${appDoctor.value}</td>`, 
+
+        `<td>${appDate.value}</td>`, 
+
+        `<td>${appDiagnosis.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PHARMACIES */ 
+
+function addPharmacy() { 
+
+    addRow("pharmacyTable", [ 
+
+        `<td>${pharmID++}</td>`, 
+
+        `<td>${pharmName.value}</td>`, 
+
+        `<td>${pharmAddress.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* PRESCRIPTIONS */ 
+
+function addPrescription() { 
+
+    addRow("prescriptionTable", [ 
+
+        `<td>${rxID++}</td>`, 
+
+        `<td>${rxPatient.value}</td>`, 
+
+        `<td>${rxDoctor.value}</td>`, 
+
+        `<td>${rxPharmacy.value}</td>`, 
+
+        `<td>${rxDate.value}</td>`, 
+
+        `<td>${rxDrug.value}</td>`, 
+
+        `<td>${rxDose.value}</td>`, 
+
+        `<td>${rxConfirm.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* SUPPLIERS */ 
+
+function addSupplier() { 
+
+    addRow("supplierTable", [ 
+
+        `<td>${supplierID++}</td>`, 
+
+        `<td>${supName.value}</td>`, 
+
+        `<td>${supPhone.value}</td>`, 
+
+        `<td>${supAddress.value}</td>` 
+
+    ]); 
+
+} 
+
+ 
+
+/* ORDERS */ 
+
+function addOrder() { 
+
+    addRow("orderTable", [ 
+
+        `<td>${ordID++}</td>`, 
+
+        `<td>${ordSupplierID.value}</td>`, 
+
+        `<td>${ordPharmID.value}</td>`, 
+
+        `<td>${ordDate.value}</td>`, 
+
+        `<td>${ordShip.value}</td>`, 
+
+        `<td>${ordItem.value}</td>` 
+
+    ]); 
+
+} 
+
+</script> 
+
+ 
+
+</body> 
+
+</html> 
